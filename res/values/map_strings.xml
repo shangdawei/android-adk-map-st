@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="map_key">0581cugVLLbIh6MzvRutGKaCBq1mV7gqjp4V9Cg</string>
+    <string name="get_location">位置情報取得中</string>
+	<string name ="err_get_location">位置情報の取得に失敗しました</string>    
+</resources>
