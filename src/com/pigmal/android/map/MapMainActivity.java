@@ -16,6 +16,7 @@ import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -31,7 +32,8 @@ import com.pigmal.android.ex.accessory.InputController;
 import com.pigmal.android.ex.accessory.OutputController;
 import com.pigmal.android.ex.accessory.R;
 
-public class MapMainActivity extends AccessoryBaseMapActivity implements LocationListener,OnDirectionChangeListener {
+public class MapMainActivity extends AccessoryBaseMapActivity implements LocationListener,
+        OnDirectionChangeListener {
 
     // ADK
 
@@ -61,7 +63,7 @@ public class MapMainActivity extends AccessoryBaseMapActivity implements Locatio
 
     private boolean isLoadLocation;
 
-    private static final int MAP_ZOOM = 15;
+    private static final int MAP_ZOOM = 19;
 
     private Handler mHandler = new Handler();
 
@@ -84,7 +86,8 @@ public class MapMainActivity extends AccessoryBaseMapActivity implements Locatio
         if (mOpenAccessory.isConnected()) {
         }
         initMapView();
-        startGps();
+        setNowLocationPin();
+        // startGps();
     }
 
     private void initMapView() {
@@ -96,8 +99,8 @@ public class MapMainActivity extends AccessoryBaseMapActivity implements Locatio
         mMapController = mMapView.getController();
         mMapController.setZoom(MAP_ZOOM);
 
-        int lat = (int) (35.681382 * 1e6);
-        int lot = (int) (139.766084 * 1e6);
+        int lat = (int) (35.661969 * 1e6);
+        int lot = (int) (139.69985 * 1e6);
         GeoPoint geoPoint = new GeoPoint(lat, lot);
         mMapController.animateTo(geoPoint);
         mLocationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -242,8 +245,11 @@ public class MapMainActivity extends AccessoryBaseMapActivity implements Locatio
 
     private void setNowLocationPin() {
 
-        int latitude = (int) (mLocation.getLatitude() * 1e6);
-        int longitude = (int) (mLocation.getLongitude() * 1e6);
+        // int latitude = (int) (mLocation.getLatitude() * 1e6);
+        // int longitude = (int) (mLocation.getLongitude() * 1e6);
+
+        int latitude = (int) (35.661969 * 1e6);
+        int longitude = (int) (139.69985 * 1e6);
 
         GeoPoint gp = new GeoPoint(latitude, longitude);
         mMapController.animateTo(gp);
@@ -281,12 +287,38 @@ public class MapMainActivity extends AccessoryBaseMapActivity implements Locatio
         return true;
     }
 
-	@Override
-	public void move(int direction, int accell) {
-		Log.e("TEST", "direction: " + direction);
-		
-//		GeoPoint mapCenter = mMapView.getMapCenter();
-//		mapCenter.getLatitudeE6();
-	}
+    @Override
+    public void move(int direction, int accell) {
+        // Log.e("TEST", "direction: " + direction);
+
+        GeoPoint mapCenter = mMapView.getMapCenter();
+        int latitudeE6 = mapCenter.getLatitudeE6();
+        int longitudeE6 = mapCenter.getLongitudeE6();
+
+        GeoPoint geoPoint = null;
+
+        switch (direction) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+                geoPoint = new GeoPoint(latitudeE6 - 1000, longitudeE6);
+                break;
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                geoPoint = new GeoPoint(latitudeE6 + 1000, longitudeE6);
+                break;
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                geoPoint = new GeoPoint(latitudeE6, longitudeE6 - 1000);
+                break;
+
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                geoPoint = new GeoPoint(latitudeE6, longitudeE6 + 1000);
+                break;
+            default:
+                break;
+        }
+
+        if (geoPoint != null) {
+            mMapController.animateTo(geoPoint);
+        }
+
+    }
 
 }

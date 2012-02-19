@@ -6,12 +6,15 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.sax.StartElementListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
+import com.pigmal.android.accessory.GameActivity;
 import com.pigmal.android.ex.accessory.R;
 
 public class LocationOverlay extends ItemizedOverlay<LocationOverlayItem> {
@@ -48,11 +51,16 @@ public class LocationOverlay extends ItemizedOverlay<LocationOverlayItem> {
 
     @Override
     protected boolean onTap(int index) {
-        final GeoPoint geoPoint = pointList.get(index);
 
-        MapView mapView = (MapView) ((Activity) mContext).findViewById(R.id.map);
-        MapController controller = mapView.getController();
-        controller.animateTo(geoPoint);
+        Intent intent = new Intent(mContext, GameActivity.class);
+        mContext.startActivity(intent);
+
+        // final GeoPoint geoPoint = pointList.get(index);
+        //
+        // MapView mapView = (MapView) ((Activity)
+        // mContext).findViewById(R.id.map);
+        // MapController controller = mapView.getController();
+        // controller.animateTo(geoPoint);
 
         return true;
     }
