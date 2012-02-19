@@ -1,5 +1,7 @@
 package com.pigmal.android.accessory.view;
 
+import java.util.ArrayList;
+
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.widget.ImageButton;
 
 import com.pigmal.android.accessory.game.Beam;
 import com.pigmal.android.ex.accessory.DirectionDescriptor.OnDirectionChangeListener;
@@ -20,7 +23,9 @@ import com.pigmal.android.ex.accessory.R;
 public class MySurfaceView extends SurfaceView implements
 		SurfaceHolder.Callback, Runnable, OnDirectionChangeListener {
 
-    private Bitmap img, imgBeam;
+    public static final int MAX_APPLE = 2;
+    
+    private Bitmap img, imgBeam, imgEnemy;
     private boolean isRunning = true;
     private Thread thread;
     private Paint paint;
@@ -28,6 +33,7 @@ public class MySurfaceView extends SurfaceView implements
     int firstY;
     int vX, vY;
     int dispW, dispH;
+    private ArrayList<Enemy> enemies = new ArrayList<Enemy>(MAX_APPLE);
 
     public MySurfaceView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -53,9 +59,18 @@ public class MySurfaceView extends SurfaceView implements
         getHolder().addCallback(this);
         paint = new Paint();
         img = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.hiouki);
+        imgEnemy = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_launcher_demokit);
         imgBeam = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_demokit);
+       
         setCenterBottom();
-        
+        initEnemies();
+    }
+    
+    private void initEnemies(){
+        for( int i = 0; i < MAX_APPLE; i++){
+            Enemy enemy = new Enemy(dispW, dispH, imgBeam.getWidth(), imgBeam.getHeight());
+            enemies.add(enemy);
+        }
     }
     
     private void setCenterBottom(){
@@ -74,6 +89,7 @@ public class MySurfaceView extends SurfaceView implements
     public void surfaceCreated(SurfaceHolder holder) {
         thread = new Thread(this);
         thread.start();
+        isRunning = true;
     }
 
     @Override
@@ -82,6 +98,7 @@ public class MySurfaceView extends SurfaceView implements
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        isRunning = false;
         thread = null;
     }
     
@@ -109,6 +126,11 @@ public class MySurfaceView extends SurfaceView implements
     private void draw(){
         Canvas canvas = getHolder().lockCanvas();
         canvas.drawColor(Color.GRAY);
+        
+        //Enemy
+        for(Enemy enemy:enemies){
+            canvas.drawBitmap(imgEnemy, enemy.x, enemy.y, paint);
+        }
         
         // Beam
         if(beam != null){
