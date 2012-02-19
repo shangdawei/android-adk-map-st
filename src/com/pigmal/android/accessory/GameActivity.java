@@ -16,6 +16,7 @@ public class GameActivity extends Activity  implements OnClickListener{
     Button buttonDown;
     Button buttonLeft;
     Button buttonRight;
+    Button buttonBeam;
 
     
     @Override
@@ -33,6 +34,8 @@ public class GameActivity extends Activity  implements OnClickListener{
         buttonLeft.setOnClickListener(this);
         buttonRight = (Button)findViewById(R.id.button_right);
         buttonRight.setOnClickListener(this);
+        buttonBeam = (Button)findViewById(R.id.button_beam);
+        buttonBeam.setOnClickListener(this);
         
 
     }
@@ -54,6 +57,9 @@ public class GameActivity extends Activity  implements OnClickListener{
         case R.id.button_down:
             surfaceView.move(KeyEvent.KEYCODE_DPAD_DOWN, 10);
             break;
+            
+        case R.id.button_beam:
+            surfaceView.fire();
 
         default:
             break;
