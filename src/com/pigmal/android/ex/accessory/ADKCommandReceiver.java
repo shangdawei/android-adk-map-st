@@ -19,11 +19,11 @@ package com.pigmal.android.ex.accessory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.widget.SeekBar;
 
 import com.pigmal.android.accessory.AccessoryListener;
 import com.pigmal.android.ex.accessory.DirectionDescriptor.OnDirectionChangeListener;
+import com.pigmal.android.ex.accessory.DirectionDescriptor.OnFireListener;
 
 /**
  * Receive message from ADK and display on the device display
@@ -50,6 +50,7 @@ public class ADKCommandReceiver implements AccessoryListener {
 	private InputController mInputController;
 	private DirectionDescriptor mDescriptor;
 	private OnDirectionChangeListener mDirectionChangeListener;
+	private OnFireListener mFireListener;
 
 	public ADKCommandReceiver() {
 		mDescriptor = new DirectionDescriptor();
@@ -156,10 +157,11 @@ public class ADKCommandReceiver implements AccessoryListener {
 	protected void handleJoyMessage(JoyMsg j) {
 		if (mDirectionChangeListener != null) {
 			mDirectionChangeListener.move(
-					mDescriptor.getDirection(DirectionDescriptor.Axis.X, j.getX()), 10);
+					mDescriptor.getDirection(DirectionDescriptor.Axis.X,
+							j.getX()), 30);
 			mDirectionChangeListener.move(
 					mDescriptor.getDirection(DirectionDescriptor.Axis.Y,
-							j.getY()), 10);
+							j.getY()), 30);
 		}
 		if (mInputController != null) {
 			mInputController.joystickMoved(j.getX(), j.getY());
@@ -188,6 +190,12 @@ public class ADKCommandReceiver implements AccessoryListener {
 						.joystickButtonSwitchStateChanged(o.getState() != 0);
 			}
 		}
+		if (mFireListener != null) {
+			byte sw = o.getSw();
+			if (sw == 4 && o.getState() != 0) {
+				mFireListener.fire();
+			}
+		}
 	}
 
 	/**
@@ -209,6 +217,10 @@ public class ADKCommandReceiver implements AccessoryListener {
 
 	public void setOnDirectionChangeListener(OnDirectionChangeListener listener) {
 		mDirectionChangeListener = listener;
+	}
+
+	public void setOnFireListener(OnFireListener listener) {
+		mFireListener = listener;
 	}
 
 	@Override
