@@ -59,7 +59,7 @@ public class MySurfaceView extends SurfaceView implements
         getHolder().addCallback(this);
         paint = new Paint();
         img = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.hiouki);
-        imgEnemy = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.ic_launcher_demokit);
+        imgEnemy = BitmapFactory.decodeResource(getContext().getResources(), R.drawable.enemy_apple);
         imgBeam = BitmapFactory.decodeResource(getResources(), R.drawable.ic_launcher_demokit);
        
         setCenterBottom();
