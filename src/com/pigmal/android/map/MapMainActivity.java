@@ -26,11 +26,12 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.pigmal.android.accessory.AccessoryBaseMapActivity;
 import com.pigmal.android.ex.accessory.ADKCommandReceiver;
+import com.pigmal.android.ex.accessory.DirectionDescriptor.OnDirectionChangeListener;
 import com.pigmal.android.ex.accessory.InputController;
 import com.pigmal.android.ex.accessory.OutputController;
 import com.pigmal.android.ex.accessory.R;
 
-public class MapMainActivity extends AccessoryBaseMapActivity implements LocationListener {
+public class MapMainActivity extends AccessoryBaseMapActivity implements LocationListener,OnDirectionChangeListener {
 
     // ADK
 
@@ -77,6 +78,7 @@ public class MapMainActivity extends AccessoryBaseMapActivity implements Locatio
         mContext = getApplicationContext();
 
         mReceiver = new ADKCommandReceiver();
+        mReceiver.setOnDirectionChangeListener(this);
         mOpenAccessory.setListener(mReceiver);
 
         if (mOpenAccessory.isConnected()) {
@@ -278,5 +280,13 @@ public class MapMainActivity extends AccessoryBaseMapActivity implements Locatio
         menu.add("Quit");
         return true;
     }
+
+	@Override
+	public void move(int direction, int accell) {
+		Log.e("TEST", "direction: " + direction);
+		
+//		GeoPoint mapCenter = mMapView.getMapCenter();
+//		mapCenter.getLatitudeE6();
+	}
 
 }
