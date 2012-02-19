@@ -5,8 +5,9 @@ import android.content.Context;
 public class Beam {
     
     public static final int ACCELL = 15;
-    private int x,y;
+    public int x,y;
     private int vX, vY;
+    public boolean isVisible = true;
     public Beam(Context context, int x, int y, int vX, int vY) {
         super();
         this.x = x;
@@ -15,10 +16,10 @@ public class Beam {
         this.vY = vY;
     }
     
-    public int getX(){
+    public int getNextX(){
         return x;
     }
-    public int getY(){
+    public int getNextY(){
         return y = y - vY - 15;
     }
 

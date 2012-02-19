@@ -8,6 +8,10 @@ public class DirectionDescriptor {
 		void move(int direction, int accell);
 	}
 
+	public interface OnFireListener {
+		void fire();
+	}
+
 	enum Axis {
 		X, Y
 	};

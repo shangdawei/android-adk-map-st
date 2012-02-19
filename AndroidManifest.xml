@@ -6,6 +6,9 @@
 
     <uses-sdk android:minSdkVersion="10" />
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:icon="@drawable/ic_launcher_demokit"
         android:label="@string/app_name" >
@@ -13,20 +16,31 @@
         <uses-library android:name="com.google.android.maps" />
 
         <activity
-            android:label="@string/app_name"
-            android:name=".SimpleDemoKit" >
-            <intent-filter >
+            android:name="com.pigmal.android.map.MapMainActivity"
+            android:icon="@drawable/ic_launcher_maps"
+            android:label="@string/map_title"
+            android:screenOrientation="portrait" >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
+            android:name=".SimpleDemoKit"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.pigmal.android.accessory.OnAccessoryAttachedActivity"
             android:label="SimpleDemoKit"
             android:launchMode="singleInstance"
-            android:name="com.pigmal.android.accessory.OnAccessoryAttachedActivity"
             android:taskAffinity="" >
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED" />
             </intent-filter>
 
@@ -35,30 +49,16 @@
                 android:resource="@xml/accessory_filter" />
         </activity>
         <activity
+            android:name="com.pigmal.android.accessory.GameActivity"
             android:icon="@drawable/android_limg_280x"
             android:label="@string/game_title"
-            android:name="com.pigmal.android.accessory.GameActivity"
             android:screenOrientation="portrait" >
-            <intent-filter >
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:icon="@drawable/ic_launcher_maps"
-            android:label="@string/map_title"
-            android:name="com.pigmal.android.map.MapMainActivity"
-            android:screenOrientation="portrait" >
-            <intent-filter >
+            <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 </manifest>
