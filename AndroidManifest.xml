@@ -33,21 +33,27 @@
                 android:name="android.hardware.usb.action.USB_ACCESSORY_ATTACHED"
                 android:resource="@xml/accessory_filter" />
         </activity>
-        <activity android:name="com.pigmal.android.accessory.GameActivity" android:screenOrientation="portrait">
+        <activity
+            android:name="com.pigmal.android.accessory.GameActivity"
+            android:icon="@drawable/android_limg_280x"
+            android:label="@string/game_title"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
-        <activity android:name="com.pigmal.android.accessory.MapMainActivity" android:screenOrientation="portrait">
+        <activity
+            android:name="com.pigmal.android.accessory.MapMainActivity"
+            android:icon="@drawable/ic_launcher_maps"
+            android:label="@string/map_title"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            
         </activity>
     </application>
 
