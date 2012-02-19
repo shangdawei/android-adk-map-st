@@ -16,7 +16,8 @@ public class GameActivity extends AccessoryBaseActivity implements
 	Button buttonUp;
 	Button buttonDown;
 	Button buttonLeft;
-	Button buttonRight;
+    Button buttonRight;
+    Button buttonBeam;
 
 	private ADKCommandReceiver mReceiver;
 
@@ -39,6 +40,9 @@ public class GameActivity extends AccessoryBaseActivity implements
 		buttonLeft.setOnClickListener(this);
 		buttonRight = (Button) findViewById(R.id.button_right);
 		buttonRight.setOnClickListener(this);
+        buttonBeam = (Button)findViewById(R.id.button_beam);
+        buttonBeam.setOnClickListener(this);
+
 
 	}
 
@@ -59,10 +63,11 @@ public class GameActivity extends AccessoryBaseActivity implements
 		case R.id.button_down:
 			surfaceView.move(KeyEvent.KEYCODE_DPAD_DOWN, 10);
 			break;
+        case R.id.button_beam:
+            surfaceView.fire();
 
 		default:
 			break;
 		}
 	}
-
 }
