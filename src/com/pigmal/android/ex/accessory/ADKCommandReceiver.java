@@ -22,15 +22,17 @@ import android.util.Log;
 import android.widget.SeekBar;
 
 import com.pigmal.android.accessory.AccessoryListener;
+import com.pigmal.android.ex.accessory.DirectionDescriptor.OnDirectionChangeListener;
 
 /**
  * Receive message from ADK and display on the device display
+ * 
  * @author itog
- *
+ * 
  */
 public class ADKCommandReceiver implements AccessoryListener {
 	private static final String TAG = "SimpleDemokit";
-	
+
 	/**
 	 * message ids defined in RT-ADK firmware
 	 */
@@ -45,7 +47,13 @@ public class ADKCommandReceiver implements AccessoryListener {
 	private static final int MESSAGE_JOY = 4;
 
 	private InputController mInputController;
-	
+	private DirectionDescriptor mDescriptor;
+	private OnDirectionChangeListener mDirectionChangeListener;
+
+	public ADKCommandReceiver() {
+		mDescriptor = new DirectionDescriptor();
+	}
+
 	protected class SwitchMsg {
 		private byte sw;
 		private byte state;
@@ -105,11 +113,11 @@ public class ADKCommandReceiver implements AccessoryListener {
 			return y;
 		}
 	}
-	
+
 	private int composeInt(byte hi, byte lo) {
 		return ((hi & 0xff) << 8) + (lo & 0xff);
 	}
-	
+
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message msg) {
@@ -143,7 +151,12 @@ public class ADKCommandReceiver implements AccessoryListener {
 
 	public void onStopTrackingTouch(SeekBar seekBar) {
 	}
+
 	protected void handleJoyMessage(JoyMsg j) {
+		if (mDirectionChangeListener != null) {
+			mDirectionChangeListener.move(
+					mDescriptor.getDirection(j.getX(), j.getY()), 10);
+		}
 		if (mInputController != null) {
 			mInputController.joystickMoved(j.getX(), j.getY());
 		}
@@ -174,25 +187,31 @@ public class ADKCommandReceiver implements AccessoryListener {
 	}
 
 	/**
-	 * Connect input controller so that the sensor value
-	 * will be shown on the display
+	 * Connect input controller so that the sensor value will be shown on the
+	 * display
+	 * 
 	 * @param controller
 	 */
 	public void setInputController(InputController controller) {
 		mInputController = controller;
 	}
+
 	/**
 	 * Disconnect input controller then stop to display
 	 */
 	public void removeInputController() {
-		mInputController = null;		
+		mInputController = null;
+	}
+
+	public void setOnDirectionChangeListener(OnDirectionChangeListener listener) {
+		mDirectionChangeListener = listener;
 	}
 
 	@Override
 	public void onAccessoryMessage(byte[] buffer) {
 		int i = 0;
 		int ret = buffer.length;
-		
+
 		while (i < ret) {
 			int len = ret - i;
 
@@ -219,7 +238,8 @@ public class ADKCommandReceiver implements AccessoryListener {
 			case TYPE_LIGHT:
 				if (len >= 3) {
 					Message m = Message.obtain(mHandler, MESSAGE_LIGHT);
-					m.obj = new LightMsg(composeInt(buffer[i + 1], buffer[i + 2]));
+					m.obj = new LightMsg(composeInt(buffer[i + 1],
+							buffer[i + 2]));
 					mHandler.sendMessage(m);
 				}
 				i += 3;
