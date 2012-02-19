@@ -15,16 +15,34 @@ import android.location.LocationManager;
 import android.location.LocationProvider;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
+import com.pigmal.android.accessory.AccessoryBaseMapActivity;
+import com.pigmal.android.ex.accessory.ADKCommandReceiver;
+import com.pigmal.android.ex.accessory.InputController;
+import com.pigmal.android.ex.accessory.OutputController;
 import com.pigmal.android.ex.accessory.R;
 
-public class MapMainActivity extends MapActivity implements LocationListener {
+public class MapMainActivity extends AccessoryBaseMapActivity implements LocationListener {
+
+    // ADK
+
+    private ADKCommandReceiver mReceiver;
+
+    @SuppressWarnings("unused")
+    private OutputController mOutputController;
+
+    private InputController mInputController;
+
+    // ADK
+    private static final String TAG = "MapMainActivity";
 
     private Context mContext;
 
@@ -55,10 +73,14 @@ public class MapMainActivity extends MapActivity implements LocationListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.map_activity);
         mContext = getApplicationContext();
 
+        mReceiver = new ADKCommandReceiver();
+        mOpenAccessory.setListener(mReceiver);
+
+        if (mOpenAccessory.isConnected()) {
+        }
         initMapView();
         startGps();
     }
@@ -181,17 +203,17 @@ public class MapMainActivity extends MapActivity implements LocationListener {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         mLocationManager.removeUpdates(this);
     }
@@ -229,6 +251,32 @@ public class MapMainActivity extends MapActivity implements LocationListener {
         LocationOverlay nowLocationOverlay = new LocationOverlay(pin, (Context) this);
         overlays.add(nowLocationOverlay);
         nowLocationOverlay.addPoint(gp);
+    }
+
+    @Override
+    protected void onUsbAtached() {
+        Log.v(TAG, "onUsbAtached");
+    }
+
+    @Override
+    protected void onUsbDetached() {
+        Log.v(TAG, "onUsbDetached");
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getTitle().equals("Simulate")) {
+        } else if (item.getTitle().equals("Quit")) {
+            finish();
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        menu.add("Simulate");
+        menu.add("Quit");
+        return true;
     }
 
 }
