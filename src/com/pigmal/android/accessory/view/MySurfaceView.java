@@ -130,12 +130,21 @@ public class MySurfaceView extends SurfaceView implements
         
         //Enemy
         for(Enemy enemy:enemies){
-            canvas.drawBitmap(imgEnemy, enemy.x, enemy.y, paint);
+
+            if(enemy.isVisible){
+                if(isCollision(enemy, beam)){
+                    enemy.isVisible = false;
+                    beam.isVisible = false;
+                }
+            }
+            
+            if(enemy.isVisible){
+                canvas.drawBitmap(imgEnemy, enemy.x, enemy.y, paint);
+            }
         }
-        
         // Beam
-        if(beam != null){
-            canvas.drawBitmap(imgBeam, beam.getX(), beam.getY(), paint);
+        if(beam != null && beam.isVisible){
+            canvas.drawBitmap(imgBeam, beam.getNextX(), beam.getNextY(), paint);
         }
         
         canvas.drawBitmap(img, vX, vY, paint);
@@ -146,5 +155,20 @@ public class MySurfaceView extends SurfaceView implements
     
     public void fire(){
         beam = new Beam(getContext(), vX, vY, Beam.ACCELL, Beam.ACCELL);
+    }
+    
+    private boolean isCollision(Enemy enemy, Beam beam){
+        
+        if(beam == null || enemy == null){
+            return false;
+        }
+        
+        if(beam.x + (imgBeam.getWidth() / 2) >= enemy.x && beam.x <= enemy.x + imgEnemy.getWidth()
+           && beam.y <= enemy.y
+        ){
+          return true;  
+        }
+        
+        return false;
     }
 }
