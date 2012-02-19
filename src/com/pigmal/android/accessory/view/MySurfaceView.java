@@ -18,10 +18,11 @@ import android.widget.ImageButton;
 
 import com.pigmal.android.accessory.game.Beam;
 import com.pigmal.android.ex.accessory.DirectionDescriptor.OnDirectionChangeListener;
+import com.pigmal.android.ex.accessory.DirectionDescriptor.OnFireListener;
 import com.pigmal.android.ex.accessory.R;
 
 public class MySurfaceView extends SurfaceView implements
-		SurfaceHolder.Callback, Runnable, OnDirectionChangeListener {
+		SurfaceHolder.Callback, Runnable, OnDirectionChangeListener, OnFireListener {
 
     public static final int MAX_APPLE = 2;
     
