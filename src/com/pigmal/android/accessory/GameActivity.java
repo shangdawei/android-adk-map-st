@@ -31,6 +31,7 @@ public class GameActivity extends AccessoryBaseActivity implements
 		mReceiver = new ADKCommandReceiver();
 		mOpenAccessory.setListener(mReceiver);
 		mReceiver.setOnDirectionChangeListener(surfaceView);
+		mReceiver.setOnFireListener(surfaceView);
 
 		buttonUp = (Button) findViewById(R.id.button_up);
 		buttonUp.setOnClickListener(this);
