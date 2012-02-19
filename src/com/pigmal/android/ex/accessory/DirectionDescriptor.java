@@ -8,26 +8,37 @@ public class DirectionDescriptor {
 		void move(int direction, int accell);
 	}
 
-	private int X, Y;
+	enum Axis {
+		X, Y
+	};
+
+	private int oldX, oldY;
 	private final int VELOCITY = 20;
 
-	public int getDirection(int x, int y) {
+	public int getDirection(Axis axis, int size) {
 		int result = KeyEvent.KEYCODE_DPAD_CENTER;
-		if (X * x > 0) {
-			if (x > VELOCITY) {
-				result = KeyEvent.KEYCODE_DPAD_RIGHT;
-			} else if (x < -VELOCITY) {
-				result = KeyEvent.KEYCODE_DPAD_LEFT;
+		switch (axis) {
+		case X:
+			if (oldX * size > 0) {
+				if (size > VELOCITY) {
+					result = KeyEvent.KEYCODE_DPAD_RIGHT;
+				} else if (size < -VELOCITY) {
+					result = KeyEvent.KEYCODE_DPAD_LEFT;
+				}
 			}
-		} else if (Y * y > 0) {
-			if (y > VELOCITY) {
-				result = KeyEvent.KEYCODE_DPAD_DOWN;
-			} else if (y < -VELOCITY) {
-				result = KeyEvent.KEYCODE_DPAD_UP;
+			oldX = size;
+			break;
+		case Y:
+			if (oldY * size > 0) {
+				if (size > VELOCITY) {
+					result = KeyEvent.KEYCODE_DPAD_DOWN;
+				} else if (size < -VELOCITY) {
+					result = KeyEvent.KEYCODE_DPAD_UP;
+				}
 			}
+			oldY = size;
+			break;
 		}
-		X = x;
-		Y = y;
 		return result;
 	}
 

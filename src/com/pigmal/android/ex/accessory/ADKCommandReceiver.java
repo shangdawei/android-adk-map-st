@@ -19,6 +19,7 @@ package com.pigmal.android.ex.accessory;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.widget.SeekBar;
 
 import com.pigmal.android.accessory.AccessoryListener;
@@ -155,7 +156,10 @@ public class ADKCommandReceiver implements AccessoryListener {
 	protected void handleJoyMessage(JoyMsg j) {
 		if (mDirectionChangeListener != null) {
 			mDirectionChangeListener.move(
-					mDescriptor.getDirection(j.getX(), j.getY()), 10);
+					mDescriptor.getDirection(DirectionDescriptor.Axis.X, j.getX()), 10);
+			mDirectionChangeListener.move(
+					mDescriptor.getDirection(DirectionDescriptor.Axis.Y,
+							j.getY()), 10);
 		}
 		if (mInputController != null) {
 			mInputController.joystickMoved(j.getX(), j.getY());
